@@ -1,30 +1,52 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import routes from './routes.js'
+import store from '@/store/index.js'
 
-Vue.use(VueRouter);
-
-const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
-  },
-];
+Vue.use(VueRouter)
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
-  routes,
-});
+  routes
+})
 
-export default router;
+router.beforeEach(async (to, from, next) => {
+  const publicPageNames = ['login', 'register']
+
+  // store.dispatch('cancelAllPendingAxiosRequests/cancelPendingRequest')
+
+  const toIsPublicPage = publicPageNames.includes(to.name)
+  const user = store.state.auth.user
+
+  if (!user) {
+    try {
+      await store.dispatch('auth/fetchUser')
+    } catch (error) {
+      // console.error('Error fetchUser', error.response)
+    }
+  }
+
+  const isAuthenticated = !!store.state.auth.user
+
+  // console.log(user)
+  // const userIsClient = store.getters['auth/userIsClient']
+
+  if (toIsPublicPage && !isAuthenticated) {
+    next()
+    return
+  }
+
+  if (toIsPublicPage && isAuthenticated) {
+    next({ name: 'dashboard' })
+    return
+  }
+
+  if (isAuthenticated) {
+    next()
+  } else {
+    next({ name: 'login' })
+  }
+})
+
+export default router
