@@ -1,9 +1,15 @@
 <template>
   <v-app-bar
-    app
+    :clipped-left="leftDrawer.clipped"
+    :clipped-right="rightDrawer.clipped"
     color="primary"
     dark
+    app
   >
+    <v-app-bar-nav-icon
+      v-if="leftDrawer.type !== 'permanent'"
+      @click.stop="setLeftDrawerShow({show: !leftDrawer.show})"
+    />
     <div class="d-flex align-center">
       El rey
     </div>
@@ -20,12 +26,21 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+
+import { mapState, mapActions } from 'vuex'
 
 export default {
+  computed: {
+    ...mapState({
+      rightDrawer: (state) => state.defaultLayout.rightDrawer,
+      leftDrawer: (state) => state.defaultLayout.leftDrawer
+    })
+  },
   methods: {
     ...mapActions({
-      logout: 'auth/logout'
+      logout: 'auth/logout',
+      setLeftDrawerShow: 'defaultLayout/setLeftDrawerShow'
+
     }),
     name () {
 
