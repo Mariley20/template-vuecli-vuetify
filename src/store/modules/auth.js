@@ -10,6 +10,9 @@ const state = () => ({
 const getters = {
   userUid: (state) => {
     return state.user?.uid || null
+  },
+  isAuthenticated: (state) => {
+    return !!state.user || false
   }
 }
 
@@ -31,34 +34,39 @@ const actions = {
         console.log(error)
       })
   },
-  async fetchUser ({ commit }, payload) {
+  fetchUser ({ commit, state }, payload) {
     return new Promise((resolve, reject) => {
       firebase.auth().onAuthStateChanged((user) => {
-        console.log(user)
-
         if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        // const uid = user.uid
           commit(SET_USER, { user })
-          resolve({ user })
-
-        // ...
-        } else {
-        // User is signed out
-        // ...
         }
-      })
+        resolve(user)
+      }, reject)
     })
   },
   async logout ({ commit }, payload) {
     firebase.auth().signOut().then(() => {
-      // Sign-out successful.
     }).catch((error) => {
       console.log(error)
-
-      // An error happened.
     })
+  },
+  async sendSignInLinkToEmail ({ commit }, { email, actionCodeSettings }) {
+    console.log(email, actionCodeSettings)
+    firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+      .then((response) => {
+        console.log(response)
+        // The link was successfully sent. Inform the user.
+        // Save the email locally so you don't need to ask the user for it again
+        // if they open the link on the same device.
+        window.localStorage.setItem('emailForSignIn', email)
+        // ...
+      })
+      .catch((error) => {
+        console.log(error)
+        // var errorCode = error.code
+        // var errorMessage = error.message
+        // ...
+      })
   }
 }
 

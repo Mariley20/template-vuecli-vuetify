@@ -12,10 +12,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const publicPageNames = ['login', 'register']
-
+  const publicPageNames = ['login', 'register', 'finish_sign_up']
   // store.dispatch('cancelAllPendingAxiosRequests/cancelPendingRequest')
-
+  console.log(to.name)
   const toIsPublicPage = publicPageNames.includes(to.name)
   const user = store.state.auth.user
 
@@ -28,8 +27,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   const isAuthenticated = !!store.state.auth.user
-
-  // console.log(user)
+  console.log(isAuthenticated)
   // const userIsClient = store.getters['auth/userIsClient']
 
   if (toIsPublicPage && !isAuthenticated) {
