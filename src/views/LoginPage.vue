@@ -11,6 +11,19 @@
         <div class="d-flex justify-center align-end pb-6 pt-3">
           El rey del Sur
         </div>
+        <div class="text-center">
+          <v-btn
+            type="submit"
+            color="teal"
+            class="white--text"
+            :loading="processingForm"
+            @click.prevent="registerAuthGoogleProvider"
+          >
+            Iniciar Sesión con google
+          </v-btn>
+        </div>
+
+        <v-divider class="my-4" />
         <v-form
           :id="FORM_LOGIN"
           :ref="FORM_LOGIN"
@@ -71,6 +84,7 @@
 <script>
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import { mapActions } from 'vuex'
 
 const FORM_LOGIN = 'FORM_LOGIN'
 
@@ -99,6 +113,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      registerAuthGoogleProvider: 'auth/registerAuthGoogleProvider',
+      sendSignInLinkToEmail: 'auth/sendSignInLinkToEmail'
+    }),
     async userLogin () {
       if (!this.$refs[FORM_LOGIN].validate()) return
 

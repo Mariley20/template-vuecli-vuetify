@@ -1,23 +1,19 @@
 <template>
   <v-app>
-    <AppBar />
-    <NavigationDrawerLeft />
-    <v-main>
-      <router-view />
-    </v-main>
+    <component :is="this.$route.meta.layout || 'div'">
+      <transition
+        name="fade-router-view"
+        mode="out-in"
+      >
+        <router-view />
+      </transition>
+    </component>
   </v-app>
 </template>
 
 <script>
-import NavigationDrawerLeft from '@/components/NavigationDrawer/NavigationDrawerLeft.vue'
-import AppBar from '@/components/AppBar/AppBar.vue'
-export default {
-  name: 'App',
-  components: {
-    AppBar,
-    NavigationDrawerLeft
-  },
 
+export default {
   data: () => ({
     //
   })

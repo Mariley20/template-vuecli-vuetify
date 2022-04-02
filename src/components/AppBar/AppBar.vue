@@ -40,7 +40,6 @@ export default {
     ...mapActions({
       logout: 'auth/logout',
       setLeftDrawerShow: 'defaultLayout/setLeftDrawerShow'
-
     }),
     name () {
 

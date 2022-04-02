@@ -18,18 +18,24 @@
         v-model="group"
         active-class="primary--text text--accent-4"
       >
-        <v-list-item>
+        <v-list-item :to="{name: 'products'}">
           <v-list-item-icon>
             <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Productos</v-list-item-title>
         </v-list-item>
 
-        <v-list-item>
+        <v-list-item :to="{name: 'users'}">
           <v-list-item-icon>
             <v-icon>mdi-account</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Usuarios</v-list-item-title>
+        </v-list-item>
+        <v-list-item :to="{name: 'dashboard'}">
+          <v-list-item-icon>
+            <v-icon>mdi-account</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Dasboard</v-list-item-title>
         </v-list-item>
         <!-- <v-list-item>
           <v-list-item-icon>
